@@ -4,7 +4,6 @@ fun main() {
     fun part1(input: List<String>): Int {
         val leftList = mutableListOf<Int>()
         val rightList = mutableListOf<Int>()
-        var a = input[0]
 
         input.forEach {
             var result = it.split(regex = "\\s+".toRegex())
@@ -20,12 +19,26 @@ fun main() {
             distance += abs(leftList[i] - rightList[i])
         }
 
-
         return distance
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val leftMap = mutableMapOf<Int, Int>()
+        val rightMap = mutableMapOf<Int, Int>()
+
+        input.forEach {
+            val result = it.split(regex = "\\s+".toRegex())
+            val leftValue = result[0].toInt()
+            val rightValue = result[1].toInt()
+            leftMap.merge(leftValue, 1, Int::plus)
+            rightMap.merge(rightValue, 1, Int::plus)
+        }
+        var total = 0;
+        leftMap.forEach {
+            total += it.key * (rightMap[it.key] ?: 0) * it.value
+        }
+
+        return total
     }
 
     // Test if implementation meets criteria from the description, like:
@@ -38,5 +51,5 @@ fun main() {
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
     part1(input).println()
-//    part2(input).println()
+    part2(input).println()
 }
